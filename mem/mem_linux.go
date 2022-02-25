@@ -5,6 +5,7 @@ package mem
 
 import (
 	"github.com/NICEXAI/go-rmonitor/util"
+	"github.com/shopspring/decimal"
 	"strconv"
 	"strings"
 )
@@ -80,6 +81,11 @@ func GetMemory() (*MemoryStat, error) {
 	}
 
 	ret.Used = ret.Total - ret.free - ret.Buffers - ret.Cached
+	ret.UsedPercent, _ = decimal.NewFromFloat(float64(ret.Used) / float64(ret.Total) * 100.0).Round(2).Float64()
+
+	if !util.IsContainer() {
+		return ret, nil
+	}
 
 	//detect cgroup
 	memLimit := util.GetContentFromCGroupFile(sysMemLimitHost)
@@ -101,8 +107,9 @@ func GetMemory() (*MemoryStat, error) {
 		}
 	}
 
+	ret.Buffers = 0
 	ret.Available = ret.Total - ret.Used
-	ret.UsedPercent = float64(ret.Used) / float64(ret.Total) * 100.0
+	ret.UsedPercent, _ = decimal.NewFromFloat(float64(ret.Used) / float64(ret.Total) * 100.0).Round(2).Float64()
 
 	return ret, nil
 }

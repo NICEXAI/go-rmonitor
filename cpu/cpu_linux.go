@@ -40,6 +40,10 @@ func GetCoreNum() float32 {
 		}
 	}
 
+	if !util.IsContainer() {
+		return float32(ret)
+	}
+
 	cNum := util.GetContentFromCGroupFile(sysCpuInfoHost)
 	if cNum == -1 {
 		return float32(ret)
