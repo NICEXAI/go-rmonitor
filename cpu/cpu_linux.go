@@ -40,19 +40,7 @@ func GetCoreNum() float32 {
 		}
 	}
 
-	var (
-		cpuInfo string
-		cNum    int
-	)
-	cpuInfo, err = util.ReadContent(sysCpuInfoHost)
-	if err != nil {
-		return -1
-	}
-
-	cNum, err = strconv.Atoi(strings.ReplaceAll(cpuInfo, "\n", ""))
-	if err != nil {
-		return -1
-	}
+	cNum := util.GetContentFromCGroupFile(sysCpuInfoHost)
 	if cNum == -1 {
 		return float32(ret)
 	}

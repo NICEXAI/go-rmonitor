@@ -4,14 +4,13 @@
 package cpu
 
 import (
-	"golang.org/x/sys/windows"
+	"github.com/NICEXAI/go-rmonitor/util"
 	"unsafe"
 )
 
 var (
-	kernel32                = windows.NewLazySystemDLL("kernel32.dll")
-	getActiveProcessorCount = kernel32.NewProc("GetActiveProcessorCount")
-	getNativeSystemInfo     = kernel32.NewProc("GetNativeSystemInfo")
+	getActiveProcessorCount = util.Kernel32.NewProc("GetActiveProcessorCount")
+	getNativeSystemInfo     = util.Kernel32.NewProc("GetNativeSystemInfo")
 )
 
 type systemInfo struct {
