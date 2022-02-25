@@ -73,7 +73,7 @@ func IsContainer() bool {
 	memStat := false
 
 	for _, line := range lines {
-		lineArr := strings.Split(line, "/")
+		lineArr := strings.Split(line, ":")
 		if len(lineArr) != 3 {
 			continue
 		}
