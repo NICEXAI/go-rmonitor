@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+const procCgroupHost = "/proc/1/cgroup"
+
 var ErrInvalidFormat = errors.New("cgroups: parsing file with invalid format failed")
 
 func GetContentFromCGroupFile(filename string) int {
@@ -59,4 +61,32 @@ func parseUint(s string, base, bitSize int) (uint64, error) {
 		return 0, err
 	}
 	return v, nil
+}
+
+func IsContainer() bool {
+	lines, err := ReadLines(procCgroupHost)
+	if err != nil {
+		return false
+	}
+
+	cpuStat := false
+	memStat := false
+
+	for _, line := range lines {
+		lineArr := strings.Split(line, "/")
+		if len(lineArr) != 3 {
+			continue
+		}
+		fields := strings.Split(lineArr[1], ",")
+		for _, field := range fields {
+			if field == "cpu" && lineArr[2] != "/" {
+				cpuStat = true
+			}
+			if field == "memory" && lineArr[2] != "/" {
+				memStat = true
+			}
+		}
+	}
+
+	return cpuStat && memStat
 }

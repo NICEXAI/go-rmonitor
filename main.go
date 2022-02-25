@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/NICEXAI/go-rmonitor/cpu"
 	"github.com/NICEXAI/go-rmonitor/mem"
+	"github.com/NICEXAI/go-rmonitor/util"
 	cpu2 "github.com/shirou/gopsutil/cpu"
 	mem2 "github.com/shirou/gopsutil/mem"
 )
@@ -20,4 +21,6 @@ func main() {
 	bMem2, _ := json.Marshal(memInfo2)
 	fmt.Println(string(bMem))
 	fmt.Println(string(bMem2))
+
+	fmt.Println(util.IsContainer())
 }
