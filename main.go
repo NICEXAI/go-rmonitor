@@ -9,4 +9,5 @@ import (
 func main() {
 	count, _ := cpu2.Counts(true)
 	fmt.Println(cpu.GetCoreNum(), count)
+	fmt.Println(float32(50000) / 100000)
 }

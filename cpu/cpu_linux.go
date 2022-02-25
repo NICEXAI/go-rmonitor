@@ -57,5 +57,5 @@ func GetCoreNum() float32 {
 		return float32(ret)
 	}
 
-	return float32(cNum / 100000)
+	return float32(cNum) / 100000
 }
