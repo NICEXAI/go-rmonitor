@@ -13,6 +13,7 @@ const (
 	procMemInfoHost      = "/proc/meminfo"
 	sysMemLimitHost      = "/sys/fs/cgroup/memory/memory.limit_in_bytes"
 	sysMemUsageLimitHost = "/sys/fs/cgroup/memory/memory.usage_in_bytes"
+	sysMemStatHost       = "/sys/fs/cgroup/memory/memory.stat"
 )
 
 func GetMemory() (*MemoryStat, error) {
@@ -89,6 +90,15 @@ func GetMemory() (*MemoryStat, error) {
 	memUsageLimit := util.GetContentFromCGroupFile(sysMemUsageLimitHost)
 	if memUsageLimit != -1 {
 		ret.Used = uint64(memUsageLimit)
+	}
+
+	statLines, _ := util.ReadLines(sysMemStatHost)
+	for _, statLine := range statLines {
+		field, val, _ := util.ParseKV(statLine)
+		if field == "total_cache" {
+			ret.Cached = val
+			break
+		}
 	}
 
 	ret.Available = ret.Total - ret.Used
